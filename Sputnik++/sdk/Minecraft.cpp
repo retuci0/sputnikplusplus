@@ -11,7 +11,7 @@ void MinecraftClient::init() {
 	clazz = reinterpret_cast<jclass>(Java::env->NewGlobalRef(cls));
 	Java::env->DeleteLocalRef(cls);
 
-	instance = Java::env->GetFieldID(clazz, "instance", "Lnet/minecraft/client/Minecraft;");
+	instance = Java::env->GetStaticFieldID(clazz, "instance", "Lnet/minecraft/client/Minecraft;");
 	player = Java::env->GetFieldID(clazz, "player", "Lnet/minecraft/client/player/LocalPlayer;");
 }
 

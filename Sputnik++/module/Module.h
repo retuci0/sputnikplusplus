@@ -9,6 +9,9 @@
 #include <string>
 #include <vector>
 
+#include "../sdk/Minecraft.h"
+#include "../sdk/Player.h"
+
 
 class Module {
 public:
@@ -49,6 +52,10 @@ public:
 	virtual void onClick(int button, int action) {}
 	virtual void onWheel(int delta) {}
 
+	static void setMinecraft(MinecraftClient* newMc) {
+		mc = newMc;
+	}
+
 protected:
 	SettingGroup* addSg(const std::string& name, bool extended) {
 		auto sg = std::make_unique<SettingGroup>(name, extended);
@@ -59,11 +66,14 @@ protected:
 
 	std::string name, desc;
 	Category category;
-	bool enabled;
-	bool searchMatch, saveSettings;
+	bool enabled = false;
+	bool searchMatch = false;
+	bool saveSettings = false;
 
 	std::vector<std::unique_ptr<SettingGroup>> sgs;
 	SettingGroup* sgGeneral = addSg("general", true);
 
 	KeySetting* bind = sgGeneral->add(new KeySetting("tecla", "tecla asignada", -1));
+
+	static MinecraftClient* mc;
 };

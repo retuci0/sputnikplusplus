@@ -95,7 +95,8 @@ protected:
 	T value, defaultValue;
 	std::function<void(T)> updateListener = nullptr;
 	std::function<bool()> vCondition = nullptr;
-	bool visible, searchMatch;
+	bool visible = false;
+	bool searchMatch = false;
 	SettingGroup* sg = nullptr;
 
 	Setting(const std::string& name, const std::string& desc, T defaultValue)

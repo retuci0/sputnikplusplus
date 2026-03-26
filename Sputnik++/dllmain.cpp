@@ -9,6 +9,12 @@
 
 
 void tick() {
+    Java::env = getJNIEnv();
+    if (!Java::env) {
+        error("jni env no encontrado");
+        return;
+    }
+
     for (int key = 1; key < 256; ++key) {
         if (GetAsyncKeyState(key) & 1) {
             ModuleManager::getInstance()->onKey(key, 1);
@@ -35,6 +41,13 @@ void run() {
         return;
     }
 
+    MinecraftClient* mc = nullptr;
+    while (!mc) {
+        Java::env = getJNIEnv();
+        mc = MinecraftClient::getInstance();
+    }
+
+    Module::setMinecraft(mc);
     ModuleManager::getInstance()->addModules();
 
     while (true) {

@@ -1,9 +1,8 @@
 #pragma once
 
 #include "../java.h"
+#include "Abilities.h"
 #include <memory>
-
-class Abilities;
 
 
 class Player : public JavaObject {

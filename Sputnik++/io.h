@@ -4,7 +4,7 @@
 #include <cstdio>
 
 
-void allocateConsole() {
+static inline void allocateConsole() {
     if (!AllocConsole()) return;
 
     FILE* f;
@@ -14,25 +14,25 @@ void allocateConsole() {
     SetConsoleTitleA("sputnik++");
 }
 
-void setConsoleColor(WORD color) {
+static inline void setConsoleColor(WORD color) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hConsole != INVALID_HANDLE_VALUE)
         SetConsoleTextAttribute(hConsole, color);
 }
 
 
-void info(const char* text) {
+static inline void info(const char* text) {
     setConsoleColor(7);
     printf("%s\n", text);
 }
 
-void warn(const char* text) {
+static inline void warn(const char* text) {
     setConsoleColor(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     printf("%s\n", text);
     setConsoleColor(7);
 }
 
-void error(const char* text) {
+static inline void error(const char* text) {
     setConsoleColor(FOREGROUND_RED | FOREGROUND_INTENSITY);
     printf("%s\n", text);
     setConsoleColor(7);

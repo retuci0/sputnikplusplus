@@ -7,11 +7,11 @@
 
 
 struct Java {
-    static inline JavaVM* jvm = nullptr;
-    static inline JNIEnv* env = nullptr;
+    static inline JavaVM* jvm;
+    static inline JNIEnv* env;
 };
 
-JavaVM* getJVM() {
+static inline JavaVM* getJVM() {
     HMODULE jvmModule = GetModuleHandleA("jvm.dll");
     if (!jvmModule) return nullptr;
 
@@ -27,7 +27,7 @@ JavaVM* getJVM() {
     return nullptr;
 }
 
-JNIEnv* getJNIEnv() {
+static inline JNIEnv* getJNIEnv() {
     if (!Java::jvm) return nullptr;
 
     JNIEnv* env = nullptr;
@@ -47,9 +47,7 @@ JNIEnv* getJNIEnv() {
 class JavaObject {
 public:
     JavaObject(jobject obj)
-        : obj(Java::env->NewGlobalRef(obj)) {
-        Java::env->DeleteLocalRef(obj);
-    }
+        : obj(Java::env->NewGlobalRef(obj)) {}
 
     virtual ~JavaObject() {
         if (obj) {

@@ -5,44 +5,40 @@
 #include "../../sdk/Player.h"
 #include "../../sdk/Abilities.h"
 
+#include "../../io.h"
+
 
 class FlightModule : public Module {
 public:
     FlightModule() : Module("vuelo", "sé libre", Category::MOVEMENT, VK_F12) {}
 
     void onEnable() override {
-        auto mc = MinecraftClient::getInstance();
-        auto player = mc->getPlayer();
-        if (player) {
-            auto ab = player->getAbilities();
-            if (ab) {
-                ab->setMayfly(true);
-                ab->setFlying(true);
-            }
-        }
+        if (!mc->getPlayer()) return;
+
+        auto abilities = mc->getPlayer()->getAbilities();
+        if (!abilities) return;
+
+        abilities->setMayfly(true);
+        //abilities->setFlying(true);
     }
 
     void onDisable() override {
-        auto mc = MinecraftClient::getInstance();
-        auto player = mc->getPlayer();
-        if (player) {
-            auto ab = player->getAbilities();
-            if (ab) {
-                ab->setMayfly(false);
-                ab->setFlying(false);
+        if (mc->getPlayer()) {
+            auto abilities = mc->getPlayer()->getAbilities();
+            if (abilities) {
+                abilities->setMayfly(false);
+                //abilities->setFlying(false);
             }
         }
     }
 
     void onTick() override {
-        if (!isEnabled()) return;
-        auto mc = MinecraftClient::getInstance();
         auto player = mc->getPlayer();
         if (player) {
             auto ab = player->getAbilities();
-            if (ab && !ab->isFlying()) {
-                ab->setFlying(true);
-            }
+            //if (ab && !ab->isFlying()) {
+            //    ab->setFlying(true);
+            //}
         }
     }
 };

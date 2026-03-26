@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="module\Module.cpp" />
     <ClCompile Include="module\ModuleManager.cpp" />
     <ClCompile Include="sdk\Abilities.cpp" />
     <ClCompile Include="sdk\Minecraft.cpp" />

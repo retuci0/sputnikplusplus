@@ -1,9 +1,8 @@
 #pragma once
 
 #include "../Java.h"
+#include "Player.h"
 #include <memory>
-
-class Player;
 
 
 class MinecraftClient : public JavaObject {
