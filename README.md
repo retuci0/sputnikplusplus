@@ -14,10 +14,12 @@ para que skids como yo puedan crear su propio cliente JNI. y para aprender C++.
 
 ## cómo inyectar
 
-de momento, hasta que haga un inyector, usar Process Hacker 2 o alguna utilidad por el estilo para inyectar el DLL
+usar el inyector que viene integrado, solo ejecutarlo en el mismo directorio que el dll, y abrir Minecraft 1.21.11
 
 ## créditos y tal
 
 > PRs bienvenidos
 
 > si se va a usar, agradecería créditos
+
+> créditos a https://github.com/luisgargudi/SimpleDLLInjector/ por el código del inyector
