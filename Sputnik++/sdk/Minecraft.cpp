@@ -25,5 +25,7 @@ MinecraftClient::MinecraftClient() : JavaObject(nullptr) {
 std::unique_ptr<Player> MinecraftClient::getPlayer() const {
 	jobject p = Java::env->GetObjectField(obj, player);
 	if (!p) return nullptr;
-	return std::make_unique<Player>(p);
+	auto result = std::make_unique<Player>(p);
+	Java::env->DeleteLocalRef(p);
+	return result;
 }

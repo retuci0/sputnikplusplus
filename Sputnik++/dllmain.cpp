@@ -41,13 +41,6 @@ void run() {
         return;
     }
 
-    MinecraftClient* mc = nullptr;
-    while (!mc) {
-        Java::env = getJNIEnv();
-        mc = MinecraftClient::getInstance();
-    }
-
-    Module::setMinecraft(mc);
     ModuleManager::getInstance()->addModules();
 
     while (true) {

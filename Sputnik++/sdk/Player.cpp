@@ -18,5 +18,7 @@ Player::Player(jobject obj) : JavaObject(obj) {
 std::unique_ptr<Abilities> Player::getAbilities() const {
     jobject ab = Java::env->GetObjectField(obj, abilities);
     if (!ab) return nullptr;
-    return std::make_unique<Abilities>(ab);
+    auto result = std::make_unique<Abilities>(ab);
+    Java::env->DeleteLocalRef(ab);
+    return result;
 }

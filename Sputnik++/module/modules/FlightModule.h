@@ -13,32 +13,34 @@ public:
     FlightModule() : Module("vuelo", "sé libre", Category::MOVEMENT, VK_F12) {}
 
     void onEnable() override {
-        if (!mc->getPlayer()) return;
-
-        auto abilities = mc->getPlayer()->getAbilities();
-        if (!abilities) return;
-
-        abilities->setMayfly(true);
-        //abilities->setFlying(true);
+        if (auto ab = getAbilities()) {
+            ab->setMayfly(true);
+            ab->setFlying(true);
+        }
     }
 
     void onDisable() override {
-        if (mc->getPlayer()) {
-            auto abilities = mc->getPlayer()->getAbilities();
-            if (abilities) {
-                abilities->setMayfly(false);
-                //abilities->setFlying(false);
-            }
+        if (auto ab = getAbilities()) {
+            ab->setMayfly(false);
+            ab->setFlying(false);
         }
     }
 
     void onTick() override {
-        auto player = mc->getPlayer();
-        if (player) {
-            auto ab = player->getAbilities();
-            //if (ab && !ab->isFlying()) {
-            //    ab->setFlying(true);
-            //}
+        if (auto ab = getAbilities()) {
+            if (!ab->isFlying()) {
+                ab->setFlying(true);
+            }
         }
+    }
+
+private:
+    Abilities* getAbilities() const {
+        auto mc = MinecraftClient::getInstance();
+        if (!mc) return nullptr;
+        auto player = mc->getPlayer();
+        if (!player) return nullptr;
+        auto ab = player->getAbilities();
+        return ab ? ab.release() : nullptr;
     }
 };
