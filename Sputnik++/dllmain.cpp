@@ -9,12 +9,6 @@
 
 
 void tick() {
-    Java::env = getJNIEnv();
-    if (!Java::env) {
-        error("jni env no encontrado");
-        return;
-    }
-
     for (int key = 1; key < 256; ++key) {
         if (GetAsyncKeyState(key) & 1) {
             ModuleManager::getInstance()->onKey(key, 1);
@@ -32,12 +26,6 @@ void run() {
     Java::jvm = getJVM();
     if (!Java::jvm) {
         error("JVM no encontrado");
-        return;
-    }
-
-    Java::env = getJNIEnv();
-    if (!Java::env) {
-        error("entorno JNI no encontrado");
         return;
     }
 

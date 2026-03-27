@@ -1,14 +1,63 @@
 #pragma once
 
 #include <cassert>
+#include <iostream>
+#include <memory>
 #include <jni.h>
 #include <string>
 #include <windows.h>
 
 
 struct Java {
-    static inline JavaVM* jvm;
-    static inline JNIEnv* env;
+    static inline JavaVM* jvm = nullptr;
+
+    static JNIEnv* getEnv() {
+        JNIEnv* env = nullptr;
+        if (jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
+            jvm->AttachCurrentThread((void**)&env, nullptr);
+        }
+        return env;
+    }
+
+    static jclass findClass(const char* name) {
+        JNIEnv* env = getEnv();
+        jclass cls = env->FindClass(name);
+        if (env->ExceptionCheck()) {
+            env->ExceptionDescribe();
+            env->ExceptionClear();
+            return nullptr;
+        }
+        if (!cls) return nullptr;
+        jclass global = (jclass)env->NewGlobalRef(cls);
+        env->DeleteLocalRef(cls);
+        return global;
+    }
+
+    template<typename T>
+    static std::unique_ptr<T> getField(jobject obj, const char* name, const char* sig) {
+        if (!obj) {
+            std::cerr << "obj was null";
+            return nullptr;
+        }
+        JNIEnv* env = getEnv();
+        jclass cls = env->GetObjectClass(obj);
+        jfieldID fid = env->GetFieldID(cls, name, sig);
+        if (env->ExceptionCheck() || !fid) {
+            env->ExceptionClear();
+            std::cerr << "fid was null";
+            return nullptr;
+        }
+        jobject fieldObj = env->GetObjectField(obj, fid);
+        if (env->ExceptionCheck() || !fieldObj) {
+            env->ExceptionClear();
+            std::cerr << "fieldObj was null";
+            return nullptr;
+        }
+        auto result = std::make_unique<T>(fieldObj);
+        env->DeleteLocalRef(fieldObj);
+        env->DeleteLocalRef(cls);
+        return result;
+    }
 };
 
 static inline JavaVM* getJVM() {
@@ -47,11 +96,11 @@ static inline JNIEnv* getJNIEnv() {
 class JavaObject {
 public:
     JavaObject(jobject obj)
-        : obj(Java::env->NewGlobalRef(obj)) {}
+        : obj(Java::getEnv()->NewGlobalRef(obj)) {}
 
     virtual ~JavaObject() {
         if (obj) {
-            Java::env->DeleteGlobalRef(obj);
+            Java::getEnv()->DeleteGlobalRef(obj);
         }
     }
 
@@ -65,7 +114,7 @@ public:
 
     JavaObject& operator=(JavaObject&& other) noexcept {
         if (this != &other) {
-            if (obj) Java::env->DeleteGlobalRef(obj);
+            if (obj) Java::getEnv()->DeleteGlobalRef(obj);
             obj = other.obj;
             other.obj = nullptr;
         }
@@ -74,18 +123,5 @@ public:
 
 protected:
     jobject obj;
-
-    static jmethodID getMethod(JNIEnv* env, jclass clazz, const char* name, const char* sig) {
-        jmethodID mid = env->GetMethodID(clazz, name, sig);
-        assert(mid);
-        return mid;
-    }
-
-    static jfieldID getField(JNIEnv* env, jclass clazz, const char* name, const char* sig) {
-        jfieldID fid = env->GetFieldID(clazz, name, sig);
-        assert(fid);
-        return fid;
-    }
-
     jobject raw() const { return obj; }
 };

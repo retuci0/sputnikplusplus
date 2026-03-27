@@ -1,5 +1,5 @@
 #include "Minecraft.h"
-
+#include <iostream>
 
 jclass MinecraftClient::clazz = nullptr;
 jfieldID MinecraftClient::instance = nullptr;
@@ -7,25 +7,19 @@ jfieldID MinecraftClient::player = nullptr;
 
 void MinecraftClient::init() {
 	if (clazz) return;
-	jclass cls = Java::env->FindClass("net/minecraft/client/Minecraft");
-	clazz = reinterpret_cast<jclass>(Java::env->NewGlobalRef(cls));
-	Java::env->DeleteLocalRef(cls);
+	clazz = Java::findClass("gfj");
 
-	instance = Java::env->GetStaticFieldID(clazz, "instance", "Lnet/minecraft/client/Minecraft;");
-	player = Java::env->GetFieldID(clazz, "player", "Lnet/minecraft/client/player/LocalPlayer;");
+	instance = Java::getEnv()->GetStaticFieldID(clazz, "A", "Lgfj;");
+	player = Java::getEnv()->GetFieldID(clazz, "s", "Lddm;");
 }
 
 MinecraftClient::MinecraftClient() : JavaObject(nullptr) {
 	init();
-	jobject mc = Java::env->GetStaticObjectField(clazz, instance);
-	obj = Java::env->NewGlobalRef(mc);
-	Java::env->DeleteLocalRef(mc);
+	jobject mc = Java::getEnv()->GetStaticObjectField(clazz, instance);
+	obj = Java::getEnv()->NewGlobalRef(mc);
+	Java::getEnv()->DeleteLocalRef(mc);
 }
 
 std::unique_ptr<Player> MinecraftClient::getPlayer() const {
-	jobject p = Java::env->GetObjectField(obj, player);
-	if (!p) return nullptr;
-	auto result = std::make_unique<Player>(p);
-	Java::env->DeleteLocalRef(p);
-	return result;
+	return Java::getField<Player>(raw(), "s", "Lddm;");
 }

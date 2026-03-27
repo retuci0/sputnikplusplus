@@ -1,14 +1,13 @@
 #include "Player.h"
+#include "Minecraft.h"
 
 jclass Player::clazz = nullptr;
 jfieldID Player::abilities = nullptr;
 
 void Player::init() {
     if (clazz) return;
-    jclass cls = Java::env->FindClass("net/minecraft/client/player/LocalPlayer");
-    clazz = (jclass)Java::env->NewGlobalRef(cls);
-    Java::env->DeleteLocalRef(cls);
-    abilities = Java::env->GetFieldID(clazz, "abilities", "Lnet/minecraft/world/entity/player/Abilities;");
+    clazz = Java::findClass("ddm");
+    abilities = Java::getEnv()->GetFieldID(clazz, "cG", "Lddi;");
 }
 
 Player::Player(jobject obj) : JavaObject(obj) {
@@ -16,9 +15,5 @@ Player::Player(jobject obj) : JavaObject(obj) {
 }
 
 std::unique_ptr<Abilities> Player::getAbilities() const {
-    jobject ab = Java::env->GetObjectField(obj, abilities);
-    if (!ab) return nullptr;
-    auto result = std::make_unique<Abilities>(ab);
-    Java::env->DeleteLocalRef(ab);
-    return result;
+    return Java::getField<Abilities>(raw(), "cG", "Lddi;");
 }

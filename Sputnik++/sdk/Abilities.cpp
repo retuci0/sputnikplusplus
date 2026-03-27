@@ -7,12 +7,10 @@ jfieldID Abilities::flying = nullptr;
 
 void Abilities::init() {
     if (clazz) return;
-    jclass cls = Java::env->FindClass("net/minecraft/world/entity/player/Abilities");
-    clazz = (jclass)Java::env->NewGlobalRef(cls);
-    Java::env->DeleteLocalRef(cls);
+    clazz = Java::findClass("ddi");
 
-    mayfly = Java::env->GetFieldID(clazz, "mayfly", "Z");
-    flying = Java::env->GetFieldID(clazz, "flying", "Z");
+    mayfly = Java::getEnv()->GetFieldID(clazz, "c", "Z");
+    flying = Java::getEnv()->GetFieldID(clazz, "b", "Z");
 }
 
 Abilities::Abilities(jobject obj) : JavaObject(obj) {
@@ -20,17 +18,17 @@ Abilities::Abilities(jobject obj) : JavaObject(obj) {
 }
 
 void Abilities::setMayfly(bool value) {
-    Java::env->SetBooleanField(obj, mayfly, value);
+    Java::getEnv()->SetBooleanField(obj, mayfly, value);
 }
 
 void Abilities::setFlying(bool value) {
-    Java::env->SetBooleanField(obj, flying, value);
+    Java::getEnv()->SetBooleanField(obj, flying, value);
 }
 
 bool Abilities::mayFly() const {
-    return Java::env->GetBooleanField(obj, mayfly);
+    return Java::getEnv()->GetBooleanField(obj, mayfly);
 }
 
 bool Abilities::isFlying() const {
-    return Java::env->GetBooleanField(obj, flying);
+    return Java::getEnv()->GetBooleanField(obj, flying);
 }
