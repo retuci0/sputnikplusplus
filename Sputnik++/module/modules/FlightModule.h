@@ -2,8 +2,9 @@
 
 #include "../Module.h"
 #include "../../sdk/Minecraft.h"
-#include "../../sdk/Player.h"
 #include "../../sdk/Abilities.h"
+
+#include <memory>
 
 
 class FlightModule : public Module {
@@ -33,12 +34,9 @@ public:
     }
 
 private:
-    Abilities* getAbilities() const {
-        auto mc = MinecraftClient::getInstance();
-        if (!mc) return nullptr;
-        auto player = mc->getPlayer();
-        if (!player) return nullptr;
-        auto ab = player->getAbilities();
-        return ab ? ab.release() : nullptr;
+    std::unique_ptr<Abilities> getAbilities() const {
+        auto player = MinecraftClient::getPlayer();
+        if (!player || !player->isValid()) return nullptr;
+        return player->getAbilities();
     }
 };

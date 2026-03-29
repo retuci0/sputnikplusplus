@@ -1,25 +1,48 @@
 #include "Minecraft.h"
+#include "classnames.h"
+
 #include <iostream>
 
+
 jclass MinecraftClient::clazz = nullptr;
-jfieldID MinecraftClient::instance = nullptr;
-jfieldID MinecraftClient::player = nullptr;
+jmethodID MinecraftClient::getInstanceMethod = nullptr;
+jfieldID MinecraftClient::playerField = nullptr;
 
-void MinecraftClient::init() {
-	if (clazz) return;
-	clazz = Java::findClass("gfj");
+bool MinecraftClient::init() {
+    if (clazz) return true;
+    clazz = Java::findClass(Classes::MINECRAFT);
+    if (!clazz) return false;
 
-	instance = Java::getEnv()->GetStaticFieldID(clazz, "A", "Lgfj;");
-	player = Java::getEnv()->GetFieldID(clazz, "s", "Lddm;");
+    JNIEnv* env = Java::getEnv();
+
+    getInstanceMethod = env->GetStaticMethodID(clazz, "getInstance", "()Lnet/minecraft/client/Minecraft;");
+    playerField = env->GetFieldID(clazz, "player", Classes::sig(Classes::PLAYER).c_str());
+
+    if (env->ExceptionCheck() || !getInstanceMethod || !playerField) {
+        env->ExceptionDescribe();
+        env->ExceptionClear();
+        clazz = nullptr;
+        return false;
+    }
+
+    return true;
 }
 
-MinecraftClient::MinecraftClient() : JavaObject(nullptr) {
-	init();
-	jobject mc = Java::getEnv()->GetStaticObjectField(clazz, instance);
-	obj = Java::getEnv()->NewGlobalRef(mc);
-	Java::getEnv()->DeleteLocalRef(mc);
-}
+std::unique_ptr<Player> MinecraftClient::getPlayer() {
+    if (!init()) return nullptr;
+    JNIEnv* env = Java::getEnv();
 
-std::unique_ptr<Player> MinecraftClient::getPlayer() const {
-	return Java::getField<Player>(raw(), "s", "Lddm;");
+    jobject mcLocal = env->CallStaticObjectMethod(clazz, getInstanceMethod);
+    if (env->ExceptionCheck() || !mcLocal) {
+        env->ExceptionClear();
+        return nullptr;
+    }
+
+    jobject playerLocal = env->GetObjectField(mcLocal, playerField);
+    env->DeleteLocalRef(mcLocal);
+    if (!playerLocal) return nullptr;
+
+    auto player = std::make_unique<Player>(playerLocal);
+    env->DeleteLocalRef(playerLocal);
+    return player;
 }

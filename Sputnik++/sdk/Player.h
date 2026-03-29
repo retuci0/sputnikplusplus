@@ -7,11 +7,13 @@
 
 class Player : public JavaObject {
 public:
-	Player(jobject obj);
-	std::unique_ptr<Abilities> getAbilities() const;
+    explicit Player(jobject local);
+
+    std::unique_ptr<Abilities> getAbilities() const;
 
 private:
-	static void init();
-	static jclass clazz;
-	static jfieldID abilities;
+    static bool init();
+
+    static jclass clazz;
+    static jfieldID abilitiesField;
 };

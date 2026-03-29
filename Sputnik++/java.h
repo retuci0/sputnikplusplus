@@ -1,6 +1,5 @@
-#pragma once
+﻿#pragma once
 
-#include <cassert>
 #include <iostream>
 #include <memory>
 #include <jni.h>
@@ -8,120 +7,121 @@
 #include <windows.h>
 
 
+
 struct Java {
     static inline JavaVM* jvm = nullptr;
 
+	// obtiene el JNIEnv para el hilo actual, adjuntándolo a la JVM si es necesario
     static JNIEnv* getEnv() {
+        if (!jvm) return nullptr;
         JNIEnv* env = nullptr;
-        if (jvm->GetEnv((void**)&env, JNI_VERSION_1_6) != JNI_OK) {
-            jvm->AttachCurrentThread((void**)&env, nullptr);
+        jint ret = jvm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_8);
+        if (ret == JNI_EDETACHED) {
+            JavaVMAttachArgs args{ JNI_VERSION_1_8, (char*)"client-thread", nullptr };
+            if (jvm->AttachCurrentThread(reinterpret_cast<void**>(&env), &args) != JNI_OK)
+                return nullptr;
         }
         return env;
     }
 
     static jclass findClass(const char* name) {
         JNIEnv* env = getEnv();
-        jclass cls = env->FindClass(name);
+        if (!env) return nullptr;
+        jclass local = env->FindClass(name);
         if (env->ExceptionCheck()) {
             env->ExceptionDescribe();
             env->ExceptionClear();
             return nullptr;
         }
-        if (!cls) return nullptr;
-        jclass global = (jclass)env->NewGlobalRef(cls);
-        env->DeleteLocalRef(cls);
+        if (!local) return nullptr;
+        auto global = static_cast<jclass>(env->NewGlobalRef(local));
+        env->DeleteLocalRef(local);
         return global;
     }
 
     template<typename T>
-    static std::unique_ptr<T> getField(jobject obj, const char* name, const char* sig) {
-        if (!obj) {
-            std::cerr << "obj was null";
-            return nullptr;
-        }
+    static std::unique_ptr<T> getField(jobject obj, jfieldID fid) {
+        if (!obj || !fid) return nullptr;
         JNIEnv* env = getEnv();
-        jclass cls = env->GetObjectClass(obj);
-        jfieldID fid = env->GetFieldID(cls, name, sig);
-        if (env->ExceptionCheck() || !fid) {
+        if (!env) return nullptr;
+        jobject local = env->GetObjectField(obj, fid);
+        if (env->ExceptionCheck() || !local) {
             env->ExceptionClear();
-            std::cerr << "fid was null";
             return nullptr;
         }
-        jobject fieldObj = env->GetObjectField(obj, fid);
-        if (env->ExceptionCheck() || !fieldObj) {
+        auto result = std::make_unique<T>(local);
+        env->DeleteLocalRef(local);
+        return result;
+    }
+
+    template<typename T>
+    static std::unique_ptr<T> getStaticField(jclass cls, jfieldID fid) {
+        if (!cls || !fid) return nullptr;
+        JNIEnv* env = getEnv();
+        if (!env) return nullptr;
+        jobject local = env->GetStaticObjectField(cls, fid);
+        if (env->ExceptionCheck() || !local) {
             env->ExceptionClear();
-            std::cerr << "fieldObj was null";
             return nullptr;
         }
-        auto result = std::make_unique<T>(fieldObj);
-        env->DeleteLocalRef(fieldObj);
-        env->DeleteLocalRef(cls);
+        auto result = std::make_unique<T>(local);
+        env->DeleteLocalRef(local);
         return result;
     }
 };
 
 static inline JavaVM* getJVM() {
-    HMODULE jvmModule = GetModuleHandleA("jvm.dll");
-    if (!jvmModule) return nullptr;
-
-    using JNI_GetCreatedJavaVMs_t = jint(JNICALL*)(JavaVM**, jsize, jsize*);
-    auto JNI_GetCreatedJavaVMs = reinterpret_cast<JNI_GetCreatedJavaVMs_t>(
-        GetProcAddress(jvmModule, "JNI_GetCreatedJavaVMs"));
-    if (!JNI_GetCreatedJavaVMs) return nullptr;
-
+    HMODULE mod = GetModuleHandleA("jvm.dll");
+    if (!mod) return nullptr;
+    using Fn = jint(JNICALL*)(JavaVM**, jsize, jsize*);
+    auto fn = reinterpret_cast<Fn>(GetProcAddress(mod, "JNI_GetCreatedJavaVMs"));
+    if (!fn) return nullptr;
+    JavaVM* vm = nullptr;
     jsize count = 0;
-    JavaVM* vm;
-    jint result = JNI_GetCreatedJavaVMs(&vm, 1, &count);
-    if (result == JNI_OK && count > 0 && vm != nullptr) return vm;
-    return nullptr;
-}
-
-static inline JNIEnv* getJNIEnv() {
-    if (!Java::jvm) return nullptr;
-
-    JNIEnv* env = nullptr;
-    jint ret = Java::jvm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_8);
-
-    if (ret == JNI_EDETACHED) {
-        char name[] = "sputnik-thread";
-        JavaVMAttachArgs args = { JNI_VERSION_1_8, name, nullptr};
-        ret = Java::jvm->AttachCurrentThread(reinterpret_cast<void**>(&env), &args);
-        if (ret != JNI_OK) return nullptr;
-    }
-    return env;
+    return (fn(&vm, 1, &count) == JNI_OK && count > 0) ? vm : nullptr;
 }
 
 
-// wrapper de jobject no copiable pero amovible
+
+// wrapper sobre una referencia global de JNI que no se puede copiar pero sí mover
 class JavaObject {
 public:
-    JavaObject(jobject obj)
-        : obj(Java::getEnv()->NewGlobalRef(obj)) {}
+    explicit JavaObject(jobject local) : obj(nullptr) {
+        if (local) {
+            JNIEnv* env = Java::getEnv();
+            if (env) obj = env->NewGlobalRef(local);
+        }
+    }
 
     virtual ~JavaObject() {
         if (obj) {
-            Java::getEnv()->DeleteGlobalRef(obj);
+            JNIEnv* env = Java::getEnv();
+            if (env) env->DeleteGlobalRef(obj);
         }
     }
 
     JavaObject(const JavaObject&) = delete;
     JavaObject& operator=(const JavaObject&) = delete;
 
-    JavaObject(JavaObject&& other) noexcept
-        : obj(other.obj) {
+    JavaObject(JavaObject&& other) noexcept : obj(other.obj) {
         other.obj = nullptr;
     }
 
     JavaObject& operator=(JavaObject&& other) noexcept {
         if (this != &other) {
-            if (obj) Java::getEnv()->DeleteGlobalRef(obj);
+            if (obj) {
+                JNIEnv* env = Java::getEnv();
+                if (env) env->DeleteGlobalRef(obj);
+            }
             obj = other.obj;
             other.obj = nullptr;
         }
         return *this;
     }
 
+    jobject raw() const { return obj; }
+    bool isValid() const { return obj != nullptr; }
+
 protected:
     jobject obj;
-    jobject raw() const { return obj; }
 };

@@ -1,24 +1,21 @@
 #pragma once
 
-#include "../Java.h"
+#include "../java.h"
 #include "Player.h"
 #include <memory>
 
 
-class MinecraftClient : public JavaObject {
+// objeto estático puro: busca el instance y el player cada llamada
+class MinecraftClient {
 public:
-	static MinecraftClient* getInstance() {
-		static MinecraftClient INSTANCE;
-		return &INSTANCE;
-	}
+    MinecraftClient() = delete;
 
-	std::unique_ptr<Player> getPlayer() const;
+    static bool init();
+
+    static std::unique_ptr<Player> getPlayer();
 
 private:
-	MinecraftClient();
-	static void init();
-
-	static jclass clazz;
-	static jfieldID instance;
-	static jfieldID player;
+    static jclass clazz;
+    static jmethodID getInstanceMethod;
+    static jfieldID playerField;
 };

@@ -8,11 +8,11 @@
 #include <chrono>
 
 
-void tick() {
+static void tick() {
+    // gestión de teclas
     for (int key = 1; key < 256; ++key) {
-        if (GetAsyncKeyState(key) & 1) {
+        if (GetAsyncKeyState(key) & 1)
             ModuleManager::getInstance()->onKey(key, 1);
-        }
     }
 
     ModuleManager::getInstance()->tick();
@@ -20,7 +20,7 @@ void tick() {
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
 }
 
-void run() {
+static void run() {
     allocateConsole();
 
     Java::jvm = getJVM();
@@ -41,15 +41,12 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved) {
     if (reason == DLL_PROCESS_ATTACH) {
         DisableThreadLibraryCalls(hModule);
         HANDLE hThread = CreateThread(nullptr, 0,
-            [](LPVOID) -> DWORD {
-                run(); return 0;
-            },
+            [](LPVOID) -> DWORD { run(); return 0; },
             nullptr, 0, nullptr
         );
         if (hThread) CloseHandle(hThread);
     } else if (reason == DLL_PROCESS_DETACH) {
         FreeConsole();
     }
-
     return TRUE;
 }

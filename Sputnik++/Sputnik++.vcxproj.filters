@@ -77,5 +77,8 @@
     <ClInclude Include="module\modules\FlightModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sdk\classnames.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

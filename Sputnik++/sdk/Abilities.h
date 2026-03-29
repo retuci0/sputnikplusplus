@@ -5,15 +5,17 @@
 
 class Abilities : public JavaObject {
 public:
-    Abilities(jobject obj);
+    explicit Abilities(jobject local);
+
     void setMayfly(bool value);
     void setFlying(bool value);
     bool mayFly() const;
     bool isFlying() const;
 
 private:
-    static void init();
+    static bool init();
+
     static jclass clazz;
-    static jfieldID mayfly;
-    static jfieldID flying;
+    static jfieldID mayflyField;
+    static jfieldID flyingField;
 };

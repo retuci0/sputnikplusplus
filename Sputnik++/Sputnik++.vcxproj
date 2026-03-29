@@ -160,6 +160,7 @@
     <ClInclude Include="module\setting\settings\KeySetting.h" />
     <ClInclude Include="module\setting\settings\NumberSetting.h" />
     <ClInclude Include="sdk\Abilities.h" />
+    <ClInclude Include="sdk\classnames.h" />
     <ClInclude Include="sdk\Minecraft.h" />
     <ClInclude Include="sdk\Player.h" />
     <ClInclude Include="util\KeyUtil.h" />
