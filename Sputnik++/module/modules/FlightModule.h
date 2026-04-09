@@ -4,12 +4,19 @@
 #include "../../sdk/Minecraft.h"
 #include "../../sdk/Abilities.h"
 
+#include "../util/KeyUtil.h"
+
+#ifdef _WIN32
+#include <windows.h>
+#include <WinUser.h>
+#endif
+
 #include <memory>
 
 
 class FlightModule : public Module {
 public:
-    FlightModule() : Module("vuelo", "sé libre", Category::MOVEMENT, VK_F12) {}
+    FlightModule() : Module("vuelo", "sÃ© libre", Category::MOVEMENT, KEY_F12) {}
 
     void onEnable() override {
         if (auto ab = getAbilities()) {

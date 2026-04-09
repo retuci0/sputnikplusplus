@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Module.h"
 #include "Setting.h"
 
+#include <algorithm>
 #include <string>
 #include <vector>
 

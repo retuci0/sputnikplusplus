@@ -7,16 +7,27 @@
 #include <thread>
 #include <chrono>
 
+#ifdef _WIN32
+    #include <windows.h>
+#else
+    #include "util/LinuxKeys.h"
+#endif
+
 
 static void tick() {
-    // gestión de teclas
+#ifdef _WIN32
     for (int key = 1; key < 256; ++key) {
         if (GetAsyncKeyState(key) & 1)
             ModuleManager::getInstance()->onKey(key, 1);
     }
+#else
+    LinuxKeys::pollKeys([](int keysym) {
+        ModuleManager::getInstance()->onKey(keysym, 1);
+    });
+#endif
 
     ModuleManager::getInstance()->tick();
-
+    
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
 }
 
@@ -29,6 +40,7 @@ static void run() {
         return;
     }
 
+    info("Sputnik++ init'd");
     ModuleManager::getInstance()->addModules();
 
     while (true) {
@@ -36,7 +48,7 @@ static void run() {
     }
 }
 
-
+#ifdef _WIN32
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved) {
     if (reason == DLL_PROCESS_ATTACH) {
         DisableThreadLibraryCalls(hModule);
@@ -50,3 +62,12 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved) {
     }
     return TRUE;
 }
+#else
+__attribute__((constructor)) void init() {
+    std::thread([](){ run(); }).detach();
+}
+
+__attribute__((destructor)) void fini() {
+    // cleanup??
+}
+#endif

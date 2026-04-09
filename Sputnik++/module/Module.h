@@ -2,7 +2,6 @@
 
 #include "Category.h"
 #include "setting/SettingGroup.h"
-#include "setting/settings/KeySetting.h"
 
 #include <memory>
 #include <string>
@@ -13,16 +12,16 @@ class Module {
 public:
     Module(const std::string& name, const std::string& desc, const Category& category, int key)
         : name(name), desc(desc), category(category) {
-        bind->setValue(key);
+        // bind->setValue(key);
     }
 
     virtual ~Module() = default;
 
-	// ni copiable ni asignable, los módulos son propiedad única del ModuleManager
+	// ni copiable ni asignable, los mï¿½dulos son propiedad ï¿½nica del ModuleManager
     Module(const Module&) = delete;
     Module& operator=(const Module&) = delete;
 
-    int  getKey()     const { return bind->getValue(); }
+    // int  getKey()     const { return bind->getValue(); }
     bool isEnabled()  const { return enabled; }
 
     void setEnabled(bool value) { enabled = value; }
@@ -56,5 +55,5 @@ protected:
 
     std::vector<std::unique_ptr<SettingGroup>> sgs;
     SettingGroup* sgGeneral = addSg("general", true);
-    KeySetting* bind = sgGeneral->add(new KeySetting("tecla", "tecla asignada", -1));
+    // KeySetting* bind = sgGeneral->add(new KeySetting("tecla", "tecla asignada", -1));
 };

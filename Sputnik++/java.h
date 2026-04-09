@@ -1,11 +1,12 @@
 ﻿#pragma once
 
-#include <iostream>
 #include <memory>
 #include <jni.h>
-#include <string>
-#include <windows.h>
-
+#ifdef _WIN32
+    #include <windows.h>
+#else
+    #include <dlfcn.h>
+#endif
 
 
 struct Java {
@@ -71,6 +72,7 @@ struct Java {
 };
 
 static inline JavaVM* getJVM() {
+#ifdef _WIN32
     HMODULE mod = GetModuleHandleA("jvm.dll");
     if (!mod) return nullptr;
     using Fn = jint(JNICALL*)(JavaVM**, jsize, jsize*);
@@ -79,6 +81,21 @@ static inline JavaVM* getJVM() {
     JavaVM* vm = nullptr;
     jsize count = 0;
     return (fn(&vm, 1, &count) == JNI_OK && count > 0) ? vm : nullptr;
+#else
+    void* handle = dlopen(NULL, RTLD_LAZY);
+    if (!handle) return nullptr;
+    using Fn = jint(JNICALL*)(JavaVM**, jsize, jsize*);
+    Fn fn = reinterpret_cast<Fn>(dlsym(handle, "JNI_GetCreatedJavaVMs"));
+    if (!fn) {
+        dlclose(handle);
+        return nullptr;
+    }
+    JavaVM* vm = nullptr;
+    jsize count = 0;
+    jint res = fn(&vm, 1, &count);
+    dlclose(handle);
+    return (res == JNI_OK && count > 0) ? vm : nullptr;
+#endif
 }
 
 

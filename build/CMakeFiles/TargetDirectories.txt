@@ -1,0 +1,8 @@
+/home/erik/sputnikplusplus/build/CMakeFiles/edit_cache.dir
+/home/erik/sputnikplusplus/build/CMakeFiles/rebuild_cache.dir
+/home/erik/sputnikplusplus/build/Injector/CMakeFiles/injector.dir
+/home/erik/sputnikplusplus/build/Injector/CMakeFiles/edit_cache.dir
+/home/erik/sputnikplusplus/build/Injector/CMakeFiles/rebuild_cache.dir
+/home/erik/sputnikplusplus/build/Sputnik++/CMakeFiles/SputnikPlusPlus.dir
+/home/erik/sputnikplusplus/build/Sputnik++/CMakeFiles/edit_cache.dir
+/home/erik/sputnikplusplus/build/Sputnik++/CMakeFiles/rebuild_cache.dir

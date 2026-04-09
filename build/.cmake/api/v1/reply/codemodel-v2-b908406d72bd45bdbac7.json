@@ -1,0 +1,158 @@
+{
+	"configurations" : 
+	[
+		{
+			"abstractTargets" : 
+			[
+				{
+					"directoryIndex" : 2,
+					"id" : "JNI::AWT::@67f9a1f90418f6f97144",
+					"jsonFile" : "target-JNI__AWT-Debug-eb3bfacea58d28e0deb6.json",
+					"name" : "JNI::AWT",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "JNI::JNI::@67f9a1f90418f6f97144",
+					"jsonFile" : "target-JNI__JNI-Debug-8bccdb349fb0bba798af.json",
+					"name" : "JNI::JNI",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "JNI::JVM::@67f9a1f90418f6f97144",
+					"jsonFile" : "target-JNI__JVM-Debug-fee28b52dbaea768b55c.json",
+					"name" : "JNI::JVM",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "Threads::Threads::@9d4830db1fa80f361e11",
+					"jsonFile" : "target-Threads__Threads-Debug-227164d8538cac027a55.json",
+					"name" : "Threads::Threads",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "Threads::Threads::@67f9a1f90418f6f97144",
+					"jsonFile" : "target-Threads__Threads-Debug-6f6e8e4cf1d903588f08.json",
+					"name" : "Threads::Threads",
+					"projectIndex" : 0
+				}
+			],
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2
+					],
+					"jsonFile" : "directory-.-Debug-fd6451d79dc282e2f566.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"abstractTargetIndexes" : 
+					[
+						3
+					],
+					"build" : "Injector",
+					"jsonFile" : "directory-Injector-Debug-8114ecfeade227ffba46.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "Injector",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						4
+					],
+					"build" : "Sputnik++",
+					"jsonFile" : "directory-Sputnik++-Debug-81c4fb71aa92fabd850d.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.10"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "Sputnik++",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2
+					],
+					"name" : "SputnikPlusPlus",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 2,
+					"id" : "SputnikPlusPlus::@67f9a1f90418f6f97144",
+					"jsonFile" : "target-SputnikPlusPlus-Debug-c40f9742560eb8d1ea92.json",
+					"name" : "SputnikPlusPlus",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "injector::@9d4830db1fa80f361e11",
+					"jsonFile" : "target-injector-Debug-057a744884712ec9f61e.json",
+					"name" : "injector",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/erik/sputnikplusplus/build",
+		"source" : "/home/erik/sputnikplusplus"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 10
+	}
+}

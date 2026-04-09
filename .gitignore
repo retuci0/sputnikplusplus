@@ -24,3 +24,6 @@ logs/
 *.tmp
 *~
 *.bak
+
+*.so
+/injector

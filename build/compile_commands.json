@@ -1,0 +1,38 @@
+[
+{
+  "directory": "/home/erik/sputnikplusplus/build",
+  "command": "/usr/bin/clang++ -I/home/erik/sputnikplusplus/Injector/. -g -std=gnu++17 -o Injector/CMakeFiles/injector.dir/main.cpp.o -c /home/erik/sputnikplusplus/Injector/main.cpp",
+  "file": "/home/erik/sputnikplusplus/Injector/main.cpp",
+  "output": "/home/erik/sputnikplusplus/build/Injector/CMakeFiles/injector.dir/main.cpp.o"
+},
+{
+  "directory": "/home/erik/sputnikplusplus/build",
+  "command": "/usr/bin/clang++ -DSputnikPlusPlus_EXPORTS -I/home/erik/sputnikplusplus/Sputnik++/. -I/home/erik/sputnikplusplus/Sputnik++/module -I/home/erik/sputnikplusplus/Sputnik++/module/modules -I/home/erik/sputnikplusplus/Sputnik++/module/setting -I/home/erik/sputnikplusplus/Sputnik++/module/setting/settings -I/home/erik/sputnikplusplus/Sputnik++/sdk -I/home/erik/sputnikplusplus/Sputnik++/util -I/usr/lib/jvm/default/include -I/usr/lib/jvm/default/include/linux -g -std=gnu++17 -fPIC -o Sputnik++/CMakeFiles/SputnikPlusPlus.dir/dllmain.cpp.o -c /home/erik/sputnikplusplus/Sputnik++/dllmain.cpp",
+  "file": "/home/erik/sputnikplusplus/Sputnik++/dllmain.cpp",
+  "output": "/home/erik/sputnikplusplus/build/Sputnik++/CMakeFiles/SputnikPlusPlus.dir/dllmain.cpp.o"
+},
+{
+  "directory": "/home/erik/sputnikplusplus/build",
+  "command": "/usr/bin/clang++ -DSputnikPlusPlus_EXPORTS -I/home/erik/sputnikplusplus/Sputnik++/. -I/home/erik/sputnikplusplus/Sputnik++/module -I/home/erik/sputnikplusplus/Sputnik++/module/modules -I/home/erik/sputnikplusplus/Sputnik++/module/setting -I/home/erik/sputnikplusplus/Sputnik++/module/setting/settings -I/home/erik/sputnikplusplus/Sputnik++/sdk -I/home/erik/sputnikplusplus/Sputnik++/util -I/usr/lib/jvm/default/include -I/usr/lib/jvm/default/include/linux -g -std=gnu++17 -fPIC -o Sputnik++/CMakeFiles/SputnikPlusPlus.dir/module/ModuleManager.cpp.o -c /home/erik/sputnikplusplus/Sputnik++/module/ModuleManager.cpp",
+  "file": "/home/erik/sputnikplusplus/Sputnik++/module/ModuleManager.cpp",
+  "output": "/home/erik/sputnikplusplus/build/Sputnik++/CMakeFiles/SputnikPlusPlus.dir/module/ModuleManager.cpp.o"
+},
+{
+  "directory": "/home/erik/sputnikplusplus/build",
+  "command": "/usr/bin/clang++ -DSputnikPlusPlus_EXPORTS -I/home/erik/sputnikplusplus/Sputnik++/. -I/home/erik/sputnikplusplus/Sputnik++/module -I/home/erik/sputnikplusplus/Sputnik++/module/modules -I/home/erik/sputnikplusplus/Sputnik++/module/setting -I/home/erik/sputnikplusplus/Sputnik++/module/setting/settings -I/home/erik/sputnikplusplus/Sputnik++/sdk -I/home/erik/sputnikplusplus/Sputnik++/util -I/usr/lib/jvm/default/include -I/usr/lib/jvm/default/include/linux -g -std=gnu++17 -fPIC -o Sputnik++/CMakeFiles/SputnikPlusPlus.dir/sdk/Abilities.cpp.o -c /home/erik/sputnikplusplus/Sputnik++/sdk/Abilities.cpp",
+  "file": "/home/erik/sputnikplusplus/Sputnik++/sdk/Abilities.cpp",
+  "output": "/home/erik/sputnikplusplus/build/Sputnik++/CMakeFiles/SputnikPlusPlus.dir/sdk/Abilities.cpp.o"
+},
+{
+  "directory": "/home/erik/sputnikplusplus/build",
+  "command": "/usr/bin/clang++ -DSputnikPlusPlus_EXPORTS -I/home/erik/sputnikplusplus/Sputnik++/. -I/home/erik/sputnikplusplus/Sputnik++/module -I/home/erik/sputnikplusplus/Sputnik++/module/modules -I/home/erik/sputnikplusplus/Sputnik++/module/setting -I/home/erik/sputnikplusplus/Sputnik++/module/setting/settings -I/home/erik/sputnikplusplus/Sputnik++/sdk -I/home/erik/sputnikplusplus/Sputnik++/util -I/usr/lib/jvm/default/include -I/usr/lib/jvm/default/include/linux -g -std=gnu++17 -fPIC -o Sputnik++/CMakeFiles/SputnikPlusPlus.dir/sdk/Minecraft.cpp.o -c /home/erik/sputnikplusplus/Sputnik++/sdk/Minecraft.cpp",
+  "file": "/home/erik/sputnikplusplus/Sputnik++/sdk/Minecraft.cpp",
+  "output": "/home/erik/sputnikplusplus/build/Sputnik++/CMakeFiles/SputnikPlusPlus.dir/sdk/Minecraft.cpp.o"
+},
+{
+  "directory": "/home/erik/sputnikplusplus/build",
+  "command": "/usr/bin/clang++ -DSputnikPlusPlus_EXPORTS -I/home/erik/sputnikplusplus/Sputnik++/. -I/home/erik/sputnikplusplus/Sputnik++/module -I/home/erik/sputnikplusplus/Sputnik++/module/modules -I/home/erik/sputnikplusplus/Sputnik++/module/setting -I/home/erik/sputnikplusplus/Sputnik++/module/setting/settings -I/home/erik/sputnikplusplus/Sputnik++/sdk -I/home/erik/sputnikplusplus/Sputnik++/util -I/usr/lib/jvm/default/include -I/usr/lib/jvm/default/include/linux -g -std=gnu++17 -fPIC -o Sputnik++/CMakeFiles/SputnikPlusPlus.dir/sdk/Player.cpp.o -c /home/erik/sputnikplusplus/Sputnik++/sdk/Player.cpp",
+  "file": "/home/erik/sputnikplusplus/Sputnik++/sdk/Player.cpp",
+  "output": "/home/erik/sputnikplusplus/build/Sputnik++/CMakeFiles/SputnikPlusPlus.dir/sdk/Player.cpp.o"
+}
+]

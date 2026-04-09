@@ -1,0 +1,9 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/erik/sputnikplusplus/build/cmake_install.cmake",
+		"/home/erik/sputnikplusplus/build/Injector/cmake_install.cmake",
+		"/home/erik/sputnikplusplus/build/Sputnik++/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

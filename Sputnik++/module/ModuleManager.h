@@ -38,9 +38,9 @@ public:
 
     void onKey(int key, int action) {
         for (auto& mod : modules) {
-            if (mod->getKey() == key)
-                mod->toggle();
-            else if (mod->isEnabled())
+            // if (mod->getKey() == key)
+            //     mod->toggle();
+            if (mod->isEnabled())
                 mod->onKey(key, action);
         }
     }

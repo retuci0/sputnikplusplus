@@ -2,8 +2,13 @@
 
 #include "../Setting.h"
 #include "../../../util/KeyUtil.h"
-#include <windows.h>
-#include <WinUser.h>
+
+#ifdef _WIN32
+	#include <windows.h>
+	#include <WinUser.h>
+#else
+	#define VK_ESCAPE 0x1B
+#endif
 
 
 class KeySetting : public Setting<int> {

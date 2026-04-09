@@ -57,10 +57,6 @@ public:
 		this->sg = sg;
 	}
 
-	Module* getModule() const {
-		return sg->getModule();
-	}
-
 	bool isVisible() const {
 		if (vCondition != nullptr) {
 			return vCondition();
